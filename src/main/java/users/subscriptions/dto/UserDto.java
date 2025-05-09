@@ -10,9 +10,11 @@ public class UserDto {
     @Size(min = 4, max = 16, message = "от 4 до 16 символов")
     private String userName;
 
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$",
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
             message = "неправильный формат мыла")
     private String email;
+
+    public UserDto(){}
 
     public UserDto(String userName, String email) {
         this.userName = userName;
@@ -30,6 +32,7 @@ public class UserDto {
     public String getEmail() {
         return email;
     }
+
 
     public void setEmail(String email) {
         this.email = email;
