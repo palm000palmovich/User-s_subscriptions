@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  user-subscription-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: user-subscription-service:latest
+    container_name: user-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: subscriptions
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/subs_and_recs
+      SPRING_DATASOURCE_USERNAME: subscriber
+      SPRING_DATASOURCE_PASSWORD: like
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_VALIDATION_ENABLED: "true"
+      SPRING_LIQUIBASE_CHANGE_LOG: classpath:liquibase/changelog-master.yml
+    depends_on:
+      - postgres
+    restart: on-failure
+
+  postgres:
+    image: postgres:15
+    container_name: user-db
+    environment:
+      POSTGRES_DB: subs_and_recs
+      POSTGRES_USER: subscriber
+      POSTGRES_PASSWORD: like
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    restart: always
+
+volumes:
+  postgres_data:
