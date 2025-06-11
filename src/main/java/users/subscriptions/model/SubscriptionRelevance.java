@@ -14,6 +14,8 @@ public class SubscriptionRelevance {
     private Long sub_id;
     private LocalDateTime end_time;
 
+    public SubscriptionRelevance(){}
+
     public SubscriptionRelevance(Long id, Long user_id, Long sub_id, LocalDateTime end_time) {
         this.id = id;
         this.user_id = user_id;

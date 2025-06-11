@@ -3,6 +3,9 @@ package users.subscriptions.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "subscriptions")
 public class Subscriptions {
@@ -12,14 +15,24 @@ public class Subscriptions {
     @Column(name = "type", nullable = false)
     private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
-    private User user;
+    @Column(name = "subscribers_counter")
+    private int subscribersCounter;
 
-    public Subscriptions(String type, User user) {
+    @OneToMany(mappedBy = "subscription")
+    @JsonBackReference
+    private List<User> users;
+
+    public Subscriptions() {
+    }
+
+    public void addUser(User user) {
+        if (users == null) {
+            users = new ArrayList<>();
+        }
+        users.add(user);
+    }
+    public Subscriptions(String type) {
         this.type = type;
-        this.user = user;
     }
 
     public Long getId() {
@@ -38,12 +51,12 @@ public class Subscriptions {
         this.type = type;
     }
 
-    public User getUser() {
-        return user;
+    public int getSubscribersCounter() {
+        return subscribersCounter;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSubscribersCounter(int subscribersCounter) {
+        this.subscribersCounter = subscribersCounter;
     }
 
     @Override
@@ -51,7 +64,7 @@ public class Subscriptions {
         return "Subscriptions{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
-                ", user=" + user +
+                //", user=" + user
                 '}';
     }
 }

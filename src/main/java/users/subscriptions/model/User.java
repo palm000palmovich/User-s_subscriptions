@@ -18,13 +18,15 @@ public class User {
     @Size(min = 4, max = 16, message = "от 4 до 16 символов")
     @Column(name = "username")
     private String userName;
-    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$",
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
             message = "неправильный формат мыла")
     private String email;
 
-    @OneToMany(mappedBy = "user")
-    @JsonBackReference
-    private List<Subscriptions> subs;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sub_id")
+    private Subscriptions subscription;
+
+    public User(){}
 
     public User(String userName, String email) {
         this.userName = userName;
@@ -55,12 +57,12 @@ public class User {
         this.email = email;
     }
 
-    public List<Subscriptions> getSubs() {
-        return subs;
+    public Subscriptions getSubscription() {
+        return subscription;
     }
 
-    public void setSubs(List<Subscriptions> subs) {
-        this.subs = subs;
+    public void setSubscription(Subscriptions subscription) {
+        this.subscription = subscription;
     }
 
     @Override
@@ -69,7 +71,7 @@ public class User {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
-                ", subs=" + subs +
+                //", subs=" + subs +
                 '}';
     }
 }
